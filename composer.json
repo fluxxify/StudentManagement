@@ -1,0 +1,16 @@
+{
+    "name": "caballeda/student-management",
+    "description": "Basic Student Description",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Caballeda\\StudentManagement\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Eduardo Caballeda Jr"
+        }
+    ],
+    "require": {}
+}
