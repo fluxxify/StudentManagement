@@ -2,8 +2,9 @@
 
 namespace Caballeda\StudentManagement\Model;
 use Caballeda\StudentManagement\Core\Crud;
+use Caballeda\StudentManagement\Core\Database;
 
-class StudentModel implements Crud {
+class StudentModel extends Database implements Crud {
 
     public $id;
     public $fullname;
@@ -13,6 +14,7 @@ class StudentModel implements Crud {
 
     public function __construct()
     {
+        parent::__construct();
         $this->id = "";
         $this->fullname = "";
         $this->yearLevel = "";
@@ -20,7 +22,8 @@ class StudentModel implements Crud {
         $this->section = "";
     }
 
-    public function displayInfo(){
+    public function displayInfo()
+    {
         echo "id : ".$this->id."\n";
         echo "fullname : ".$this->fullname."\n";  
         echo "yearLevel : ".$this->yearLevel."\n"; 
@@ -28,16 +31,47 @@ class StudentModel implements Crud {
         echo "section : ".$this->section."\n"; 
     }
 
-    public function create(){
-        
-    }
-    public function read(){
-        
-    }
-    public function update(){
-    
-    }
-    public function delete(){
+    public function create() 
+    {
 
     }
+    
+    public function read(){
+        try {
+            $sql = "SELECT * FROM students";
+            $results = $this->conn->query($sql);
+            return $results->fetch_all(MYSQLI_ASSOC);
+        }catch(\Exception $e){
+            echo $e->getMessage();
+        } 
+    }
+    public function update()
+    {
+        try {
+            $stmt = $this->conn->prepare("UPDATE students SET fullname = ?, yearLevel = ?, course = ?, section = ? WHERE id = ?");
+            $stmt->bind_param("ssssi", $this->fullname, $this->yearLevel, $this->course, $this->section, $this->id);
+            return $stmt->execute();
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    
+    
+    public function delete()
+    {
+        try {
+            $stmt = $this->conn->prepare("UPDATE students SET fullname = ?, yearLevel = ?, course = ?, section = ? WHERE id = ?");
+            $stmt->bind_param("ssssi", $this->fullname, $this->yearLevel, $this->course, $this->section, $this->id);
+            return $stmt->execute();
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    
+
+    
 } 
