@@ -33,6 +33,20 @@ class StudentModel extends Database implements Crud {
 
     public function create() 
     {
+       try {
+        $sql = "INSERT INTO students (name, yearLevel, course, section) VALUES (?, ?, ?, ?)";
+        $stmt = $this->conn->preapre($sql);
+        $stmt->bind_param("ssss", $this->name, $this->year_level, $this->course, $this->section);
+
+        if ($stmt->affected_rows > 0) {
+            echo "Student successfully added!";
+        } else {
+            echo "Failed to add student.";
+        }
+        $stmt->close();
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
 
     }
     
