@@ -34,9 +34,9 @@ class StudentModel extends Database implements Crud {
     public function create() 
     {
        try {
-        $sql = "INSERT INTO students (name, yearLevel, course, section) VALUES (?, ?, ?, ?)";
-        $stmt = $this->conn->preapre($sql);
-        $stmt->bind_param("ssss", $this->name, $this->year_level, $this->course, $this->section);
+        $sql = "INSERT INTO students (`fullname`, `yearLevel`, `course`, `section`) VALUES (?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("siss", $this->fullname, $this->yearLevel, $this->course, $this->section);
 
         if ($stmt->affected_rows > 0) {
             echo "Student successfully added!";
@@ -63,7 +63,7 @@ class StudentModel extends Database implements Crud {
     {
         try {
             $stmt = $this->conn->prepare("UPDATE students SET fullname = ?, yearLevel = ?, course = ?, section = ? WHERE id = ?");
-            $stmt->bind_param("ssssi", $this->fullname, $this->yearLevel, $this->course, $this->section, $this->id);
+            $stmt->bind_param("sissi", $this->fullname, $this->yearLevel, $this->course, $this->section, $this->id);
             return $stmt->execute();
         } catch (\Exception $e) {
             echo $e->getMessage();
@@ -76,8 +76,8 @@ class StudentModel extends Database implements Crud {
     public function delete()
     {
         try {
-            $stmt = $this->conn->prepare("UPDATE students SET fullname = ?, yearLevel = ?, course = ?, section = ? WHERE id = ?");
-            $stmt->bind_param("ssssi", $this->fullname, $this->yearLevel, $this->course, $this->section, $this->id);
+            $stmt = $this->conn->prepare("DELETE FROM students WHERE id = ?");
+            $stmt->bind_param("i", $this->id);
             return $stmt->execute();
         } catch (\Exception $e) {
             echo $e->getMessage();
