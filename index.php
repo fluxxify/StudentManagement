@@ -20,8 +20,6 @@ $students = $student->read();
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
             case 'create':
-
-                $student->id = $_POST['id'];
                 $student->fullname = $_POST['fullname'];
                 $student->yearLevel = $_POST['yearLevel'];
                 $student->course = $_POST['course'];
@@ -61,7 +59,6 @@ $students = $student->read();
     <h2>Add New Student</h2>
     <form method="POST">
         <input type="hidden" name="action" value="create">
-        <input type="text" name="id" placeholder="ID" required><br>
         <input type="text" name="fullname" placeholder="Fullname" required><br>
         <input type="number" name="yearLevel" placeholder="Year Level" required><br>
         <input type="text" name="course" placeholder="Course" required><br>
@@ -72,11 +69,11 @@ $students = $student->read();
     <h2>Update Student</h2>
     <form method="POST" action="index.php">
         <input type="hidden" name="action" value="update">
-        <input type="number" name="id" placeholder="Student ID to update" required><br>
-        <input type="text" name="fullname" placeholder="Fullname" required><br>
-        <input type="number" name="yearLevel" placeholder="Year Level" required><br>
-        <input type="text" name="course" placeholder="Course" required><br>
-        <input type="text" name="section" placeholder="Section" required><br>
+        <input type="number" name="id" value="<?= $_GET ['update_id'] ?? '' ?>"><br>
+        <input type="text" name="fullname" placeholder="Fullname" value="<?php echo $studentToUpdate['fullname'] ?? '' ?>" required><br>
+        <input type="number" name="yearLevel" placeholder="Year Level" value="<?php echo $studentToUpdate['yearlevel'] ?? '' ?>"required><br>
+        <input type="text" name="course" placeholder="Course" value="<?php echo $studentToUpdate['course'] ?? '' ?>"required><br>
+        <input type="text" name="section" placeholder="Section" value="<?php echo $studentToUpdate['section'] ?? '' ?>"required><br>
         <button type="submit">Update Student</button>
     </form>
 
@@ -88,7 +85,7 @@ $students = $student->read();
             <th>Year Level</th>
             <th>Course</th>
             <th>Section</th>
-            <th>Actions</th>
+            <th>Actions</th>          
         </tr>
 
         <?php if (!empty($students)): ?>
@@ -100,6 +97,7 @@ $students = $student->read();
                     <td><?= $stu['course'] ?></td>
                     <td><?= $stu['section'] ?></td>
                     <td>
+                        <a href="index.php?update_id=<?= $stu['id'] ?>">Update</a>
                         <a href="index.php?delete_id=<?= $stu['id'] ?>">Delete</a>
                     </td>
                 </tr>

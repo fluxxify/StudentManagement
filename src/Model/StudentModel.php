@@ -36,8 +36,12 @@ class StudentModel extends Database implements Crud {
        try {
         $sql = "INSERT INTO students (`fullname`, `yearLevel`, `course`, `section`) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("siss", $this->fullname, $this->yearLevel, $this->course, $this->section);
-
+        $success = $stmt->execute([
+            $this->fullname,
+            $this->yearLevel,
+            $this->course,
+            $this->section
+        ]);
         if ($stmt->affected_rows > 0) {
             echo "Student successfully added!";
         } else {
@@ -62,16 +66,23 @@ class StudentModel extends Database implements Crud {
     public function update()
     {
         try {
-            $stmt = $this->conn->prepare("UPDATE students SET fullname = ?, yearLevel = ?, course = ?, section = ? WHERE id = ?");
-            $stmt->bind_param("sissi", $this->fullname, $this->yearLevel, $this->course, $this->section, $this->id);
+            $stmt = $this->conn->prepare(
+                "UPDATE students SET fullname = ?, yearLevel = ?, course = ?, section = ? WHERE id = ?"
+            );
+            $stmt->bind_param(
+                "sissi", // s = string, i = integer
+                $this->fullname,
+                $this->yearLevel,
+                $this->course,
+                $this->section,
+                $this->id
+            );
             return $stmt->execute();
         } catch (\Exception $e) {
             echo $e->getMessage();
             return false;
         }
     }
-
-    
     
     public function delete()
     {
@@ -84,8 +95,22 @@ class StudentModel extends Database implements Crud {
             return false;
         }
     }
+     
 
-    
-
+    public function readOne() {
+        try {
+            $sql = "SELECT * FROM students WHERE id = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("i", $this->id);
+            $stmt->execute();
+            $results = $stmt->get_result();           
+            $student = $result->fetch_();
+            $stmt->close();
+            return $student ?: null;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return null;
+        }
+    }
     
 } 
